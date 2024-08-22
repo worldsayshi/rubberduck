@@ -53,25 +53,34 @@ M.Refactor_file = function()
 	})
 
 	-- Set buffer options
-	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+	vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
 	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
 
 	-- Set text width for the buffer
-	local text_width = math.floor(width * 0.9) -- 90% of the window width
-	vim.api.nvim_set_option_value("textwidth", text_width, { buf = buf })
+	local text_width = width - 4  -- Subtract 4 to account for padding
 	vim.api.nvim_win_set_option(win, "wrap", true)
 	vim.api.nvim_win_set_option(win, "linebreak", true)
+	vim.api.nvim_win_set_option(win, "breakindent", true)
+	vim.api.nvim_set_option_value("textwidth", text_width, { buf = buf })
 
 	-- Function to append lines to the buffer and scroll
 	local function append_line(_, data)
 		if data then
-			vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-			vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
-			vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+			vim.schedule(function()
+				vim.api.nvim_buf_set_option(buf, "modifiable", true)
+				for _, line in ipairs(data) do
+					local wrapped_lines = {}
+					for i = 1, #line, text_width do
+						table.insert(wrapped_lines, line:sub(i, i + text_width - 1))
+					end
+					vim.api.nvim_buf_set_lines(buf, -1, -1, false, wrapped_lines)
+				end
+				vim.api.nvim_buf_set_option(buf, "modifiable", false)
 
-			-- Scroll to the bottom of the buffer
-			local line_count = vim.api.nvim_buf_line_count(buf)
-			vim.api.nvim_win_set_cursor(win, { line_count, 0 })
+				-- Scroll to the bottom of the buffer
+				local line_count = vim.api.nvim_buf_line_count(buf)
+				vim.api.nvim_win_set_cursor(win, { line_count, 0 })
+			end)
 		end
 	end
 
@@ -80,31 +89,33 @@ M.Refactor_file = function()
 		on_stdout = append_line,
 		on_stderr = append_line,
 		on_exit = function(_, exit_code)
-			vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-			if exit_code ~= 0 then
-				vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Error: Command exited with code " .. exit_code })
-			else
-				vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Refactoring completed successfully." })
-			end
-			vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+			vim.schedule(function()
+				vim.api.nvim_buf_set_option(buf, "modifiable", true)
+				if exit_code ~= 0 then
+					vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Error: Command exited with code " .. exit_code })
+				else
+					vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Refactoring completed successfully." })
+				end
+				vim.api.nvim_buf_set_option(buf, "modifiable", false)
 
-			-- Scroll to the bottom of the buffer
-			local line_count = vim.api.nvim_buf_line_count(buf)
-			vim.api.nvim_win_set_cursor(win, { line_count, 0 })
+				-- Scroll to the bottom of the buffer
+				local line_count = vim.api.nvim_buf_line_count(buf)
+				vim.api.nvim_win_set_cursor(win, { line_count, 0 })
 
-			-- Reload the original buffer
-			vim.api.nvim_buf_call(original_bufnr, function()
-				vim.cmd("edit!")
+				-- Reload the original buffer
+				vim.api.nvim_buf_call(original_bufnr, function()
+					vim.cmd("edit!")
+				end)
+
+				-- Set up autocmd to close the floating window when cursor moves
+				vim.api.nvim_create_autocmd("CursorMoved", {
+					buffer = buf,
+					callback = function()
+						vim.api.nvim_win_close(win, true)
+					end,
+					once = true,
+				})
 			end)
-
-			-- Set up autocmd to close the floating window when cursor moves
-			vim.api.nvim_create_autocmd("CursorMoved", {
-				buffer = buf,
-				callback = function()
-					vim.api.nvim_win_close(win, true)
-				end,
-				once = true,
-			})
 		end,
 	})
 
@@ -112,8 +123,4 @@ M.Refactor_file = function()
 	vim.api.nvim_buf_set_keymap(buf, "n", "q", ":close<CR>", { noremap = true, silent = true })
 end
 
--- Set up the key mapping
--- vim.api.nvim_set_keymap("n", "<leader>r", ":lua Refactor_file()<CR>", { noremap = true, silent = true })
-
 return M
-
