@@ -35,6 +35,9 @@ M.Refactor_file = function()
 		cmd = cmd .. " --check"
 	end
 
+	-- Store the current buffer number
+	local original_bufnr = vim.api.nvim_get_current_buf()
+
 	-- Create a floating window with a new buffer
 	local buf = vim.api.nvim_create_buf(false, true)
 	local width = math.floor(vim.o.columns * 0.8)
@@ -65,10 +68,10 @@ M.Refactor_file = function()
 			vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
 			vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-			
+
 			-- Scroll to the bottom of the buffer
 			local line_count = vim.api.nvim_buf_line_count(buf)
-			vim.api.nvim_win_set_cursor(win, {line_count, 0})
+			vim.api.nvim_win_set_cursor(win, { line_count, 0 })
 		end
 	end
 
@@ -87,10 +90,12 @@ M.Refactor_file = function()
 
 			-- Scroll to the bottom of the buffer
 			local line_count = vim.api.nvim_buf_line_count(buf)
-			vim.api.nvim_win_set_cursor(win, {line_count, 0})
+			vim.api.nvim_win_set_cursor(win, { line_count, 0 })
 
-			-- Reload the current file
-			vim.cmd("edit!")
+			-- Reload the original buffer
+			vim.api.nvim_buf_call(original_bufnr, function()
+				vim.cmd("edit!")
+			end)
 
 			-- Set up autocmd to close the floating window when cursor moves
 			vim.api.nvim_create_autocmd("CursorMoved", {
@@ -111,3 +116,4 @@ end
 -- vim.api.nvim_set_keymap("n", "<leader>r", ":lua Refactor_file()<CR>", { noremap = true, silent = true })
 
 return M
+
