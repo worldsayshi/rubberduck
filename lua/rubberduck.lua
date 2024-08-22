@@ -61,11 +61,12 @@ M.Refactor_file = function()
 	vim.api.nvim_set_option_value("linebreak", true, { win = win })
 	vim.api.nvim_set_option_value("breakindent", true, { win = win })
 
-	-- Function to append lines to the buffer and scroll
-	local function append_line(_, data)
+	-- Function to append text to the buffer and scroll
+	local function append_text(_, data)
 		if data then
 			vim.schedule(function()
 				vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+				-- TODO This will always add a new line, but we want to append to the last line and only add a new line if we get a newline character
 				vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
 				vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
@@ -78,8 +79,8 @@ M.Refactor_file = function()
 
 	-- Execute the command and stream output to the buffer
 	vim.fn.jobstart(cmd, {
-		on_stdout = append_line,
-		on_stderr = append_line,
+		on_stdout = append_text,
+		on_stderr = append_text,
 		on_exit = function(_, exit_code)
 			vim.schedule(function()
 				vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
@@ -122,3 +123,4 @@ M.Refactor_file = function()
 end
 
 return M
+
