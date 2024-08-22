@@ -67,7 +67,7 @@ M.Refactor_file = function()
 	local function append_line(_, data)
 		if data then
 			vim.schedule(function()
-				vim.api.nvim_buf_set_option(buf, "modifiable", true)
+				vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
 				for _, line in ipairs(data) do
 					local wrapped_lines = {}
 					for i = 1, #line, text_width do
@@ -75,7 +75,7 @@ M.Refactor_file = function()
 					end
 					vim.api.nvim_buf_set_lines(buf, -1, -1, false, wrapped_lines)
 				end
-				vim.api.nvim_buf_set_option(buf, "modifiable", false)
+				vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
 				-- Scroll to the bottom of the buffer
 				local line_count = vim.api.nvim_buf_line_count(buf)
@@ -90,7 +90,7 @@ M.Refactor_file = function()
 		on_stderr = append_line,
 		on_exit = function(_, exit_code)
 			vim.schedule(function()
-				vim.api.nvim_buf_set_option(buf, "modifiable", true)
+				vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
 				if exit_code ~= 0 then
 					vim.api.nvim_buf_set_lines(
 						buf,
@@ -102,7 +102,7 @@ M.Refactor_file = function()
 				else
 					vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Refactoring completed successfully." })
 				end
-				vim.api.nvim_buf_set_option(buf, "modifiable", false)
+				vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
 				-- Scroll to the bottom of the buffer
 				local line_count = vim.api.nvim_buf_line_count(buf)
@@ -130,3 +130,4 @@ M.Refactor_file = function()
 end
 
 return M
+
