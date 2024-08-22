@@ -57,10 +57,10 @@ M.Refactor_file = function()
 	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
 
 	-- Set text width for the buffer
-	local text_width = width - 4  -- Subtract 4 to account for padding
-	vim.api.nvim_win_set_option(win, "wrap", true)
-	vim.api.nvim_win_set_option(win, "linebreak", true)
-	vim.api.nvim_win_set_option(win, "breakindent", true)
+	local text_width = width - 4 -- Subtract 4 to account for padding
+	vim.api.nvim_set_option_value("wrap", true, { win = win })
+	vim.api.nvim_set_option_value("linebreak", true, { win = win })
+	vim.api.nvim_set_option_value("breakindent", true, { win = win })
 	vim.api.nvim_set_option_value("textwidth", text_width, { buf = buf })
 
 	-- Function to append lines to the buffer and scroll
@@ -92,7 +92,13 @@ M.Refactor_file = function()
 			vim.schedule(function()
 				vim.api.nvim_buf_set_option(buf, "modifiable", true)
 				if exit_code ~= 0 then
-					vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Error: Command exited with code " .. exit_code })
+					vim.api.nvim_buf_set_lines(
+						buf,
+						-1,
+						-1,
+						false,
+						{ "", "Error: Command exited with code " .. exit_code }
+					)
 				else
 					vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Refactoring completed successfully." })
 				end
