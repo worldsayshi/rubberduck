@@ -53,6 +53,12 @@ M.Refactor_file = function()
 	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
 
+	-- Set text width for the buffer
+	local text_width = math.floor(width * 0.9) -- 90% of the window width
+	vim.api.nvim_set_option_value("textwidth", text_width, { buf = buf })
+	vim.api.nvim_win_set_option(win, "wrap", true)
+	vim.api.nvim_win_set_option(win, "linebreak", true)
+
 	-- Function to append lines to the buffer
 	local function append_line(_, data)
 		if data then
@@ -97,3 +103,4 @@ end
 -- vim.api.nvim_set_keymap("n", "<leader>r", ":lua Refactor_file()<CR>", { noremap = true, silent = true })
 
 return M
+
