@@ -59,12 +59,16 @@ M.Refactor_file = function()
 	vim.api.nvim_win_set_option(win, "wrap", true)
 	vim.api.nvim_win_set_option(win, "linebreak", true)
 
-	-- Function to append lines to the buffer
+	-- Function to append lines to the buffer and scroll
 	local function append_line(_, data)
 		if data then
 			vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
 			vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+			
+			-- Scroll to the bottom of the buffer
+			local line_count = vim.api.nvim_buf_line_count(buf)
+			vim.api.nvim_win_set_cursor(win, {line_count, 0})
 		end
 	end
 
@@ -80,6 +84,10 @@ M.Refactor_file = function()
 				vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Refactoring completed successfully." })
 			end
 			vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+
+			-- Scroll to the bottom of the buffer
+			local line_count = vim.api.nvim_buf_line_count(buf)
+			vim.api.nvim_win_set_cursor(win, {line_count, 0})
 
 			-- Reload the current file
 			vim.cmd("edit!")
@@ -103,4 +111,3 @@ end
 -- vim.api.nvim_set_keymap("n", "<leader>r", ":lua Refactor_file()<CR>", { noremap = true, silent = true })
 
 return M
-
