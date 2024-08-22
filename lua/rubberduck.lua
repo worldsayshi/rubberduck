@@ -57,24 +57,16 @@ M.Refactor_file = function()
 	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
 
 	-- Set text width for the buffer
-	local text_width = width - 4 -- Subtract 4 to account for padding
 	vim.api.nvim_set_option_value("wrap", true, { win = win })
 	vim.api.nvim_set_option_value("linebreak", true, { win = win })
 	vim.api.nvim_set_option_value("breakindent", true, { win = win })
-	vim.api.nvim_set_option_value("textwidth", text_width, { buf = buf })
 
 	-- Function to append lines to the buffer and scroll
 	local function append_line(_, data)
 		if data then
 			vim.schedule(function()
 				vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-				for _, line in ipairs(data) do
-					local wrapped_lines = {}
-					for i = 1, #line, text_width do
-						table.insert(wrapped_lines, line:sub(i, i + text_width - 1))
-					end
-					vim.api.nvim_buf_set_lines(buf, -1, -1, false, wrapped_lines)
-				end
+				vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
 				vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
 				-- Scroll to the bottom of the buffer
@@ -130,4 +122,3 @@ M.Refactor_file = function()
 end
 
 return M
-
