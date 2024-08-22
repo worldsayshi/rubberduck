@@ -7,6 +7,10 @@ M.Refactor_file = function()
 
 	-- Prompt user for input
 	local user_text = vim.fn.input("Enter refactor request: ")
+	if user_text == "" then
+		vim.notify("Refactoring aborted", vim.log.levels.INFO)
+		return
+	end
 	vim.notify("User input: " .. user_text, vim.log.levels.INFO)
 
 	-- Save the file before refactoring
