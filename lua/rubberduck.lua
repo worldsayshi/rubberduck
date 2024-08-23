@@ -1,5 +1,9 @@
 local M = {}
 
+M.a_function = function()
+	return "Hello"
+end
+
 -- Refactors the file using AI
 M.Refactor_file = function()
 	local current_file = vim.fn.expand("%:p")
@@ -133,3 +137,4 @@ M.Refactor_file = function()
 end
 
 return M
+
