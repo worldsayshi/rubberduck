@@ -17,6 +17,10 @@ watch tests:
 brew install entr
 git ls-files | entr make test
 ```
+or:
+```bash
+git ls-files | entr sh -c 'clear && make test'
+```
 
 todos:
 - [ ] Split out the functionality that streams command output to a buffer and make a test for it
