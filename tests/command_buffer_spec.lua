@@ -17,7 +17,7 @@ describe("stream_command_to_floating_buffer", function()
 
 	it("streams the output of a command to a buffer", function()
 		-- Define the command to be executed
-		local cmd = { "echo", "Hello, World!" }
+		local cmd = { "echo", "-n", "Hello, World!" }
 		local buf_lines = execute_command_and_get_buffer_lines(cmd)
 
 		-- Check if the buffer contains the expected output
