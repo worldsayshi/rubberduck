@@ -1,5 +1,5 @@
 describe("stream_command_to_floating_buffer", function()
-	local M = require("buffer")
+	local M = require("command_buffer")
 	-- local helpers = require('plenary.test_harness.helpers')
 	local eq = assert.are.same
 

@@ -15,7 +15,7 @@ M.Refactor_file = function()
 		vim.notify("Refactoring aborted", vim.log.levels.INFO)
 		return
 	end
-	vim.notify("User input: " .. user_text, vim.log.levels.INFO)
+	-- vim.notify("User input: " .. user_text, vim.log.levels.INFO)
 
 	-- Save the file before refactoring
 	vim.cmd("write")
@@ -42,7 +42,7 @@ M.Refactor_file = function()
 	-- Store the current buffer number
 	local original_bufnr = vim.api.nvim_get_current_buf()
 
-	require("buffer").stream_command_to_floating_buffer(cmd, function()
+	require("command_buffer").stream_command_to_floating_buffer(cmd, function()
 		-- Reload the original buffer
 		vim.api.nvim_buf_call(original_bufnr, function()
 			vim.cmd("edit!")
