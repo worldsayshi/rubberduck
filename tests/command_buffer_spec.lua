@@ -3,6 +3,17 @@ describe("stream_command_to_floating_buffer", function()
 	-- local helpers = require('plenary.test_harness.helpers')
 	local eq = assert.are.same
 
+	local function trim_table(t)
+		local start, finish = 1, #t
+		while start <= #t and t[start] == "" do
+			start = start + 1
+		end
+		while finish > start and t[finish] == "" do
+			finish = finish - 1
+		end
+		return vim.list_slice(t, start, finish)
+	end
+
 	local function execute_command_and_get_buffer_lines(cmd)
 		local command_finished = false
 
@@ -12,7 +23,8 @@ describe("stream_command_to_floating_buffer", function()
 		vim.wait(5000, function()
 			return command_finished
 		end)
-		return vim.api.nvim_buf_get_lines(0, 0, -1, false)
+		local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+		return trim_table(lines)
 	end
 
 	it("streams the output of a command to a buffer", function()
@@ -37,3 +49,4 @@ describe("stream_command_to_floating_buffer", function()
 		eq({ "Line 1", "Line 2" }, buf_lines)
 	end)
 end)
+

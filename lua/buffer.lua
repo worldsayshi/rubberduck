@@ -24,7 +24,6 @@ M.create_floating_buffer = function()
 	vim.api.nvim_buf_set_keymap(buf, "n", "q", ":close<CR>", { noremap = true, silent = true })
 
 	local function append_text(data)
-		print("THIS IS DATA: " .. dump(data))
 		if data then
 			vim.schedule(function()
 				vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
@@ -53,4 +52,3 @@ M.create_floating_buffer = function()
 end
 
 return M
-
