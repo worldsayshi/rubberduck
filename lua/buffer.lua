@@ -22,7 +22,7 @@ local function create_floating_buffer()
 
 	vim.api.nvim_buf_set_keymap(buf, "n", "q", ":close<CR>", { noremap = true, silent = true })
 
-	local function append_text(_, data)
+	local function append_text(data)
 		if data then
 			vim.schedule(function()
 				vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
@@ -46,49 +46,26 @@ local function create_floating_buffer()
 		end
 	end
 
-	return buf, win, append_text
+	return append_text
 end
 
-local function execute_command(cmd, buf, win, append_text, command_finished_callback)
+M.stream_command_to_floating_buffer = function(cmd, command_finished_callback)
+	local append_text = create_floating_buffer()
 	vim.fn.jobstart(cmd, {
-		on_stdout = append_text,
-		on_stderr = append_text,
+		on_stdout = function(_, data)
+			append_text(data)
+		end,
+		on_stderr = function(_, data)
+			append_text(data)
+		end,
 		on_exit = function(_, exit_code)
-			vim.schedule(function()
-				vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
-				if exit_code ~= 0 then
-					vim.api.nvim_buf_set_lines(
-						buf,
-						-1,
-						-1,
-						false,
-						{ "", "Error: Command exited with code " .. exit_code }
-					)
-				end
-				vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-
-				local line_count = vim.api.nvim_buf_line_count(buf)
-				vim.api.nvim_win_set_cursor(win, { line_count, 0 })
-
-				if command_finished_callback then
-					command_finished_callback()
-				end
-
-				vim.api.nvim_create_autocmd("CursorMoved", {
-					buffer = buf,
-					callback = function()
-						vim.api.nvim_win_close(win, true)
-					end,
-					once = true,
-				})
-			end)
+			if exit_code ~= 0 then
+				append_text({ "", "Error: Command exited with code " .. exit_code })
+			end
+			command_finished_callback()
 		end,
 	})
 end
 
-M.stream_command_to_floating_buffer = function(cmd, command_finished_callback)
-	local buf, win, append_text = create_floating_buffer()
-	execute_command(cmd, buf, win, append_text, command_finished_callback)
-end
-
 return M
+
