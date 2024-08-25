@@ -33,7 +33,6 @@ describe("stream_command_to_floating_buffer", function()
 		local buf_lines = execute_command_and_get_buffer_lines(cmd)
 
 		-- Check if the buffer contains the expected output
-		-- eq("Hello, World!", buf_lines[#buf_lines])
 		eq({ "Hello, World!" }, buf_lines)
 	end)
 
