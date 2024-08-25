@@ -7,7 +7,6 @@ end
 -- Refactors the file using AI
 M.Refactor_file = function()
 	local current_file = vim.fn.expand("%:p")
-	-- vim.notify("Current file: " .. current_file, vim.log.levels.INFO)
 
 	-- Prompt user for input
 	local user_text = vim.fn.input("Refactor " .. vim.fs.basename(current_file))
@@ -15,7 +14,6 @@ M.Refactor_file = function()
 		vim.notify("Refactoring aborted", vim.log.levels.INFO)
 		return
 	end
-	-- vim.notify("User input: " .. user_text, vim.log.levels.INFO)
 
 	-- Save the file before refactoring
 	vim.cmd("write")
