@@ -16,7 +16,6 @@ M.Refactor_file = function()
 
 	local cmd
 	local file_extension = vim.fn.expand("%:e")
-	vim.notify("File extension: " .. file_extension, vim.log.levels.INFO)
 
 	if file_extension == "kind2" then
 		cmd = string.format('kindcoder "%s" "%s"', current_file, user_text)
@@ -25,8 +24,6 @@ M.Refactor_file = function()
 	else
 		cmd = string.format('refactor "%s" "%s"', current_file, user_text)
 	end
-
-	vim.notify("Command: " .. cmd, vim.log.levels.INFO)
 
 	-- Add --check flag if user_text starts with '-' or is empty
 	if user_text:match("^%-") or user_text == "" then
@@ -45,4 +42,3 @@ M.Refactor_file = function()
 end
 
 return M
-
