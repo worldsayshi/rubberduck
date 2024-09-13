@@ -36,7 +36,7 @@ or:
 git ls-files | entr sh -c 'clear && make test'
 ```
 
-todos:
+## todos
 - [ ] Bring up to speed with latest AI-scripts
 - [ ] Split out the functionality that streams command output to a buffer and make a test for it
 
