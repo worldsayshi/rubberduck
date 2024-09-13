@@ -17,6 +17,7 @@ npm install -g
 {
   "worldsayshi/rubberduck",
   dependencies = { "nvim-lua/plenary.nvim" },
+  keys = { { "<leader>r", ":RBRefactor<cr>", desc = "Refactor current file" } },
 }
 ```
 
