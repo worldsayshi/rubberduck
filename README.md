@@ -14,7 +14,7 @@ npm install -g
 2. Install this plugin, here with lazy:
 ```lua
 {
-  "worldsayshi/rubberduck.vim",
+  "worldsayshi/rubberduck",
   dependencies = { "nvim-lua/plenary.nvim" },
 }
 ```
