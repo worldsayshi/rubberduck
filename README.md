@@ -11,9 +11,12 @@ cd ~/.local/src/AI-scripts
 git checkout c935e27 # Currently only works with this commit
 npm install -g
 ```
-2. Install this plugin, here's an example with lazy:
+2. Install this plugin, here with lazy:
 ```lua
-
+{
+  "worldsayshi/rubberduck.vim",
+  dependencies = { "nvim-lua/plenary.nvim" },
+}
 ```
 
 
