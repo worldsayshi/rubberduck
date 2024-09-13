@@ -1,6 +1,7 @@
 
 This is a plugin for running https://github.com/VictorTaelin/AI-scripts in neovim. It is a work in progress.
 
+https://github.com/user-attachments/assets/0d854dcf-dead-4294-a161-5133027874a8
 
 ## Installation
 
