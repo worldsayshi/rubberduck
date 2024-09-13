@@ -1,12 +1,23 @@
 
+This is a plugin for running https://github.com/VictorTaelin/AI-scripts in neovim. It is a work in progress.
 
 
-Good test docs here:
-https://github.com/nvim-lua/plenary.nvim/blob/master/TESTS_README.md
+## Installation
 
-Plugin test example:
-https://github.com/ellisonleao/nvim-plugin-template/blob/main/tests/plugin_name/plugin_name_spec.lua
+1. Install AI-scripts
+```bash
+git clone https://github.com/VictorTaelin/AI-scripts.git ~/.local/src/AI-scripts
+cd ~/.local/src/AI-scripts
+git checkout c935e27 # Currently only works with this commit
+npm install -g
+```
+2. Install this plugin, here's an example with lazy:
+```lua
 
+```
+
+
+## Run tests
 
 run tests:
 ```bash
@@ -23,5 +34,6 @@ git ls-files | entr sh -c 'clear && make test'
 ```
 
 todos:
+- [ ] Bring up to speed with latest AI-scripts
 - [ ] Split out the functionality that streams command output to a buffer and make a test for it
 
