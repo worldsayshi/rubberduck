@@ -9,7 +9,7 @@ https://github.com/user-attachments/assets/0d854dcf-dead-4294-a161-5133027874a8
 ```bash
 git clone https://github.com/VictorTaelin/AI-scripts.git ~/.local/src/AI-scripts
 cd ~/.local/src/AI-scripts
-git checkout c935e27 # Currently only works with this commit
+# git checkout c935e27 # Currently only works with this commit
 npm install -g
 ```
 2. Install this plugin, here with lazy:
