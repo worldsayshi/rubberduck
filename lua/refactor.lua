@@ -14,21 +14,20 @@ M.Refactor_file = function()
 	-- Save the file before refactoring
 	vim.cmd("write")
 
-	local cmd
-	local file_extension = vim.fn.expand("%:e")
+	local cmd = string.format('koder "%s" "%s"', current_file, user_text)
 
-	if file_extension == "kind2" then
-		cmd = string.format('kindcoder "%s" "%s"', current_file, user_text)
-	elseif file_extension == "ts" then
-		cmd = string.format('tscoder "%s" "%s"', current_file, user_text)
-	else
-		cmd = string.format('refactor "%s" "%s"', current_file, user_text)
-	end
+	-- if file_extension == "kind2" then
+	-- 	cmd = string.format('kindcoder "%s" "%s"', current_file, user_text)
+	-- elseif file_extension == "ts" then
+	-- 	cmd = string.format('tscoder "%s" "%s"', current_file, user_text)
+	-- else
+	-- 	cmd = string.format('refactor "%s" "%s"', current_file, user_text)
+	-- end
 
 	-- Add --check flag if user_text starts with '-' or is empty
-	if user_text:match("^%-") or user_text == "" then
-		cmd = cmd .. " --check"
-	end
+	-- if user_text:match("^%-") or user_text == "" then
+	-- 	cmd = cmd .. " --check"
+	-- end
 
 	-- Store the current buffer number
 	local original_bufnr = vim.api.nvim_get_current_buf()
