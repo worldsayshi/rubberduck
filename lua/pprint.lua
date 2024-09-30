@@ -1,11 +1,11 @@
-local function dump(o)
+local function pprint(o)
 	if type(o) == "table" then
 		local s = "{ "
 		for k, v in pairs(o) do
 			if type(k) ~= "number" then
 				k = '"' .. k .. '"'
 			end
-			s = s .. "[" .. k .. "] = " .. dump(v) .. ","
+			s = s .. "[" .. k .. "] = " .. pprint(v) .. ","
 		end
 		return s .. "} "
 	else
@@ -13,4 +13,4 @@ local function dump(o)
 	end
 end
 
-return dump
+return pprint
