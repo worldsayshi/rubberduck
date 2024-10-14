@@ -39,5 +39,7 @@ git ls-files | entr sh -c 'clear && make test'
 ```
 
 ## todos
+- [ ] Make .login() work
+  - [] Use q, Esc or <C-c> to exit login loop
 - [ ] Bring up to speed with latest AI-scripts
 

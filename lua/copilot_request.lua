@@ -141,4 +141,27 @@ M.get_access_token = function(device_code)
 	return access_token
 end
 
+M.login = function()
+	local device_code_response = M.get_device_code()
+	print(
+		"Please visit "
+			.. device_code_response.verification_uri
+			.. " and enter the code: "
+			.. device_code_response.user_code
+	)
+
+	local access_token = nil
+	while not access_token do
+		vim.wait(5000) -- Wait for 5 seconds before polling again
+		local status, result = pcall(M.get_access_token, device_code_response.device_code)
+		if status then
+			access_token = result
+		else
+			print("Waiting for user to complete authentication...")
+		end
+	end
+
+	print("Login successful! Token stored.")
+end
+
 return M
