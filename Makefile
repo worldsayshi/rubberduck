@@ -13,4 +13,5 @@ test:
 test-login:
 	@nvim \
 		--headless \
-		-c ":lua require('rubberduck').login()"
+		-c ":lua require('rubberduck').login() os.exit()"
+

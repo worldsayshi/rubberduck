@@ -152,7 +152,18 @@ M.login = function()
 
 	local access_token = nil
 	while not access_token do
-		vim.wait(5000) -- Wait for 5 seconds before polling again
+		-- local char = vim.fn.getchar(0)
+		local char = vim.fn.getchar()
+		if char == 27 or char == 113 or char == 3 then
+			error("Login process aborted by user.")
+		end
+
+		-- vim.wait(5000, function()
+		--     local char = vim.fn.getchar(0)
+		-- 	if char == 27 or char == 113 or char == 3 then
+		-- 		error("Login process aborted by user.")
+		-- 	end
+		-- end)
 		local status, result = pcall(M.get_access_token, device_code_response.device_code)
 		if status then
 			access_token = result
